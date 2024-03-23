@@ -1,1 +1,1 @@
-# fullstack-frontend-vite-demo
+# fullstack-frontend-demo-react-vite
