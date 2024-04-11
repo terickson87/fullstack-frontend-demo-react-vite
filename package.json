@@ -10,7 +10,9 @@
     "preview": "vite preview",
     "clean-dist": "rm -rf dist",
     "clean-node-mod": "rm -rf node_modules",
-    "clean": "npm run clean-dist && npm run clean-node-mod"
+    "clean": "pnpm run clean:pnpm || npm run clean:npm",
+    "clean:pnpm": "pnpm clean-dist && pnpm clean-node-mod",
+    "clean:npm": "npm run clean-dist&& npm run clean-node-mod"
   },
   "dependencies": {
     "react": "^18.2.0",
