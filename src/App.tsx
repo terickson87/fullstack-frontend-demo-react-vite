@@ -5,7 +5,8 @@ import CardContent from '@mui/material/CardContent'
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 
 
 class Note {
@@ -27,13 +28,13 @@ function NoteCard(note: Note) {
 
   return (
     <Box display="inline-block">
-      <Card id={noteCardId} data-testid={noteCardId} variant="outlined" style={{ display: 'inline-block' }}>
+      <Card id={noteCardId} data-testid={noteCardId} variant="outlined" style={{ display: 'inline-block' }} raised={true} sx={{ border: 2 }}>
         <CardContent>
           <Stack>
-            <span>Note ID: {note.id}</span>
-            <span>{note.body}</span>
-            <span>Created at: {note.createdAt.toLocaleString()}</span>
-            <span>Modified at: {note.modifiedAt.toLocaleString()}</span>
+            <Typography variant='body1' color='textSecondary'>Note ID: {note.id}</Typography>
+            <Typography variant='body1' color='textSecondary'>{note.body}</Typography>
+            <Typography variant='body1' color='textSecondary'>Created at: {note.createdAt.toLocaleString()}</Typography>
+            <Typography variant='body1' color='textSecondary'>Modified at: {note.modifiedAt.toLocaleString()}</Typography>
           </Stack>
         </CardContent>
       </Card>
@@ -56,16 +57,27 @@ const hardCodedNotes: Note[] = [
   }
 ]
 
+const theme = createTheme({
+  colorSchemes: {
+    dark: true,
+  },
+});
+
 function App() {
   const [notes, setNotes] = useState<Note[]>(hardCodedNotes);
 
   return (
-    <Container maxWidth="lg" sx={{alignItems: "center"}}>
-      <Stack spacing={2} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-        <Typography align='center' variant='h3'>Note App Test Front-End</Typography>
-        {notes.map(it => NoteCard(it))}
-      </Stack>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Container maxWidth="lg" sx={{alignItems: "center"}}>
+        <Stack spacing={2} sx={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Typography align='center' variant='h3' color='textPrimary'>
+            Note App Test Front-End
+          </Typography>
+          {notes.map(it => NoteCard(it))}
+        </Stack>
+      </Container>
+    </ThemeProvider>
   )
 }
 
