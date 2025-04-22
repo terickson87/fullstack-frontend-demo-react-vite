@@ -1,39 +1,71 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
-import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent'
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Grid';
 
-function App() {
-  const [count, setCount] = useState(0)
+
+class Note {
+  id: number;
+  createdAt: Date;
+  modifiedAt: Date;
+  body: string;
+
+  constructor(id: number, createdAt: Date, modifiedAt: Date, body: string) {
+    this.id = id;
+    this.createdAt = createdAt;
+    this.modifiedAt = modifiedAt;
+    this.body = body;
+  }
+}
+
+function NoteCard(note: Note) {
+  const noteCardId = `note-card-${note.id}`;
 
   return (
-    <div data-testid="main-div">
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <Button variant="outlined" onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </Button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
+    <Box display="inline-block">
+      <Card id={noteCardId} data-testid={noteCardId} variant="outlined" style={{ display: 'inline-block' }}>
+        <CardContent>
+          <Stack>
+            <span>Note ID: {note.id}</span>
+            <span>{note.body}</span>
+            <span>Created at: {note.createdAt.toLocaleString()}</span>
+            <span>Modified at: {note.modifiedAt.toLocaleString()}</span>
+          </Stack>
+        </CardContent>
+      </Card>
+    </Box>
+  )
+}
+
+const hardCodedNotes: Note[] = [
+  {
+    "id": 1,
+    "createdAt": new Date("2025-04-17T22:27:01.757638Z"),
+    "modifiedAt": new Date("2025-04-17T22:27:01.757638Z"),
+    "body": "Note 1 body"
+  },
+  {
+    "id": 2,
+    "createdAt": new Date("2025-04-17T23:27:01.757638Z"),
+    "modifiedAt": new Date("2025-04-17T23:27:01.757638Z"),
+    "body": "Note 2 body"
+  }
+]
+
+function App() {
+  const [notes, setNotes] = useState<Note[]>(hardCodedNotes);
+
+  return (
+    <Container maxWidth="lg" sx={{alignItems: "center"}}>
+      <Stack spacing={2} sx={{ justifyContent: 'center', alignItems: 'center' }}>
+        <Typography align='center' variant='h3'>Note App Test Front-End</Typography>
+        {notes.map(it => NoteCard(it))}
+      </Stack>
+    </Container>
   )
 }
 

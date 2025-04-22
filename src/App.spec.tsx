@@ -4,7 +4,7 @@ import App from './App'
 describe('App', () => {
   test('renders', () => {
     render(<App />)
-    const component = screen.getByTestId('main-div');
+    const component = screen.getByTestId('main');
     expect(component).toBeInTheDocument();
   })
 })
