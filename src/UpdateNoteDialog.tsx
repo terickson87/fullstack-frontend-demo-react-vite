@@ -31,7 +31,7 @@ export function UpdateNoteDialog({
     const parsedId = parseInt(event.target.value);
     const noteId = !isNaN(parsedId) ? parsedId : undefined;
     setNoteUpdateId(noteId);
-    
+
     if (noteId === undefined) {
       setNoteBodyInputValue('');
       return;
@@ -52,7 +52,7 @@ export function UpdateNoteDialog({
   return (
     <Dialog open={showUpdateModal} onClose={() => handleCloseModal()}>
       <DialogContent>
-        <DialogContentText sx={{pb: 1}}>
+        <DialogContentText sx={{mb: 1}}>
           Enter the ID of the note to update.
         </DialogContentText>
         <TextField
@@ -61,7 +61,7 @@ export function UpdateNoteDialog({
           variant="outlined"
           value={noteUpdateId}
           onChange={(event) => handleIdChange(event)}
-          sx={{pb: 1}}
+          sx={{mb: 1}}
         />
         {noteUpdateId !== undefined && (noteBodyInputValue.length > 0 ?
           <TextareaAutosize

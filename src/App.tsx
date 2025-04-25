@@ -79,14 +79,14 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{alignItems: "center"}}>
-        <Stack spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
-          <Typography align='center' variant='h3' color='textPrimary'>
+        <Stack sx={{ justifyContent: 'center', alignItems: 'center' }}>
+          <Typography align='center' variant='h3' color='textPrimary' sx={{mb:1}}>
             Note App Test Front-End
           </Typography>
           {notes.map(it => <NoteCard note={it}/>)}
-          <Button variant="outlined" onClick={() => handleFetchAllNotes()}>Fetch All Notes</Button>
-          <Button variant="outlined" onClick={() => setShowCreateModal(true)}>Create Note</Button>
-          <Button variant="outlined" onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
+          <Button variant="outlined" sx={{mb:1}} onClick={() => handleFetchAllNotes()}>Fetch All Notes</Button>
+          <Button variant="outlined" sx={{mb:1}} onClick={() => setShowCreateModal(true)}>Create Note</Button>
+          <Button variant="outlined" sx={{mb:1}} onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
           <Button variant="outlined" onClick={() => setShowUpdateModal(true)}>Update Note</Button>
           <CreateNoteDialog
             showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal}

@@ -27,7 +27,7 @@ export function CreateNoteDialog({
   return (
     <Dialog open={showCreateModal} onClose={() => handleCloseModal()}>
       <DialogContent>
-        <DialogContentText sx={{pb: 1}}>
+        <DialogContentText sx={{mb: 1}}>
           Input note body and create note.
         </DialogContentText>
         <TextareaAutosize
