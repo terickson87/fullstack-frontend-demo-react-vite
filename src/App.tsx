@@ -14,6 +14,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogContent from '@mui/material/DialogContent';
 import TextareaAutosize from '@mui/material/TextareaAutosize';
+import TextField from '@mui/material/TextField';
 
 const noteSchema = z.object({
   id: z.number().positive().int(),
@@ -76,6 +77,8 @@ function App() {
   const [notes, setNotes] = useState<Note[]>(hardCodedNotes);
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [noteBodyInputValue, setNoteBodyInputValue] = useState<string>('');
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
+  const [noteDeleteId, setNoteDeleteId] = useState<number | undefined>(undefined);
 
   async function fetchNotes(): Promise<void> {
     const response = await fetch('http://localhost:8080/notes/all');
@@ -107,6 +110,19 @@ function App() {
     setShowCreateModal(false)
   }
 
+  async function deleteNote(): Promise<void> {
+    const response = await fetch(`http://localhost:8080/notes/delete/${noteDeleteId}`);
+    if (response.status === 200) {
+      await fetchNotes();
+    }
+  }
+
+  async function handleClickDeleteNote(): Promise<void> {
+    await deleteNote();
+    setNoteDeleteId(undefined);
+    setShowDeleteModal(false)
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -118,6 +134,7 @@ function App() {
           {notes.map(it => makeNoteCard(it))}
           <Button variant="outlined" onClick={() => fetchNotes()}>Fetch All Notes</Button>
           <Button variant="outlined" onClick={() => setShowCreateModal(true)}>Create Note</Button>
+          <Button variant="outlined" onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
           <Dialog open={showCreateModal} onClose={() => setShowCreateModal(false)}>
             <DialogContent>
               <DialogContentText sx={{pb: 1}}>
@@ -134,6 +151,24 @@ function App() {
             <DialogActions>
               <Button onClick={() => setShowCreateModal(false)}>Cancel</Button>
               <Button onClick={() => handleClickCreateNote()}>Create</Button>
+            </DialogActions>
+          </Dialog>
+          <Dialog open={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+            <DialogContent>
+              <DialogContentText sx={{pb: 1}}>
+                Enter the ID of the note to delete.
+              </DialogContentText>
+              <TextField
+                id="delete-note-id-field"
+                label="ID"
+                variant="outlined"
+                value={noteDeleteId}
+                onChange={(event) => setNoteDeleteId(parseInt(event.target.value))}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowDeleteModal(false)}>Cancel</Button>
+              <Button onClick={() => handleClickDeleteNote()}>Delete</Button>
             </DialogActions>
           </Dialog>
         </Stack>
