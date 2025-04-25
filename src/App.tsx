@@ -19,11 +19,11 @@ const noteSchema = z.object({
 const pageInfoSchema = z.object({
   pageSize: z.number().positive().int().optional(),
   continuation:  z.number().nonnegative().int().optional(),
-});
+}).or(z.object({}));
 const notesResponseSchema = z.object({
   notes: z.array(noteSchema),
   pageInfo: pageInfoSchema,
-}).or(z.object({}));
+});
 type Note = z.infer<typeof noteSchema>;
 type NotesResponse = z.infer<typeof notesResponseSchema>;
 
@@ -74,7 +74,7 @@ function App() {
     const response = await fetch('http://localhost:8080/notes/all');
     const json = await response.json();
     const validated: NotesResponse = notesResponseSchema.parse(json);
-    const notes = validated.notes;
+    const notes: Note[] = validated.notes;
     setNotes([...hardCodedNotes, ...notes])
   }
 
