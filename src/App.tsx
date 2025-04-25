@@ -1,9 +1,5 @@
 import React, { useState } from 'react'
-import { z } from "zod";
 import Container from '@mui/material/Container';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent'
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
@@ -11,42 +7,8 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CreateNoteDialog } from './CreateNoteDialog';
 import { DeleteNoteDialog } from './DeleteNoteDialog';
-
-const noteSchema = z.object({
-  id: z.number().positive().int(),
-  createdAt: z.coerce.date(),
-  modifiedAt: z.coerce.date(),
-  body: z.string(),
-});
-const pageInfoSchema = z.object({
-  pageSize: z.number().positive().int().optional(),
-  continuation:  z.number().nonnegative().int().optional(),
-}).or(z.object({}));
-const notesResponseSchema = z.object({
-  notes: z.array(noteSchema),
-  pageInfo: pageInfoSchema,
-});
-type Note = z.infer<typeof noteSchema>;
-type NotesResponse = z.infer<typeof notesResponseSchema>;
-
-function makeNoteCard(note: Note) {
-  const noteCardId = `note-card-${note.id}`;
-
-  return (
-    <Box display="inline-block" key={noteCardId}>
-      <Card id={noteCardId} data-testid={noteCardId} variant="outlined" style={{ display: 'inline-block' }} raised={true} sx={{ border: 2 }}>
-        <CardContent>
-          <Stack>
-            <Typography variant='body1' color='textSecondary'>Note ID: {note.id}</Typography>
-            <Typography variant='body1' color='textSecondary'>{note.body}</Typography>
-            <Typography variant='body1' color='textSecondary'>Created at: {note.createdAt.toLocaleString()}</Typography>
-            <Typography variant='body1' color='textSecondary'>Modified at: {note.modifiedAt.toLocaleString()}</Typography>
-          </Stack>
-        </CardContent>
-      </Card>
-    </Box>
-  )
-}
+import { Note, NotesResponse, notesResponseSchema } from './types';
+import { NoteCard } from './NoteCard';
 
 const hardCodedNotes: Note[] = [
   {
@@ -127,7 +89,7 @@ function App() {
           <Typography align='center' variant='h3' color='textPrimary'>
             Note App Test Front-End
           </Typography>
-          {notes.map(it => makeNoteCard(it))}
+          {notes.map(it => <NoteCard note={it}/>)}
           <Button variant="outlined" onClick={() => fetchNotes()}>Fetch All Notes</Button>
           <Button variant="outlined" onClick={() => setShowCreateModal(true)}>Create Note</Button>
           <Button variant="outlined" onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
