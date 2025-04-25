@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { z } from "zod";
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent'
@@ -6,28 +7,31 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { CssBaseline } from '@mui/material';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
 
+const noteSchema = z.object({
+  id: z.number().positive().int(),
+  createdAt: z.coerce.date(),
+  modifiedAt: z.coerce.date(),
+  body: z.string(),
+});
+const pageInfoSchema = z.object({
+  pageSize: z.number().positive().int().optional(),
+  continuation:  z.number().nonnegative().int().optional(),
+});
+const notesResponseSchema = z.object({
+  notes: z.array(noteSchema),
+  pageInfo: pageInfoSchema,
+}).or(z.object({}));
+type Note = z.infer<typeof noteSchema>;
+type NotesResponse = z.infer<typeof notesResponseSchema>;
 
-class Note {
-  id: number;
-  createdAt: Date;
-  modifiedAt: Date;
-  body: string;
-
-  constructor(id: number, createdAt: Date, modifiedAt: Date, body: string) {
-    this.id = id;
-    this.createdAt = createdAt;
-    this.modifiedAt = modifiedAt;
-    this.body = body;
-  }
-}
-
-function NoteCard(note: Note) {
+function makeNoteCard(note: Note) {
   const noteCardId = `note-card-${note.id}`;
 
   return (
-    <Box display="inline-block">
+    <Box display="inline-block" key={noteCardId}>
       <Card id={noteCardId} data-testid={noteCardId} variant="outlined" style={{ display: 'inline-block' }} raised={true} sx={{ border: 2 }}>
         <CardContent>
           <Stack>
@@ -44,13 +48,13 @@ function NoteCard(note: Note) {
 
 const hardCodedNotes: Note[] = [
   {
-    "id": 1,
+    "id": -1,
     "createdAt": new Date("2025-04-17T22:27:01.757638Z"),
     "modifiedAt": new Date("2025-04-17T22:27:01.757638Z"),
     "body": "Note 1 body"
   },
   {
-    "id": 2,
+    "id": -2,
     "createdAt": new Date("2025-04-17T23:27:01.757638Z"),
     "modifiedAt": new Date("2025-04-17T23:27:01.757638Z"),
     "body": "Note 2 body"
@@ -66,6 +70,14 @@ const theme = createTheme({
 function App() {
   const [notes, setNotes] = useState<Note[]>(hardCodedNotes);
 
+  async function fetchNotes(): Promise<void> {
+    const response = await fetch('http://localhost:8080/notes/all');
+    const json = await response.json();
+    const validated: NotesResponse = notesResponseSchema.parse(json);
+    const notes = validated.notes;
+    setNotes([...hardCodedNotes, ...notes])
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -74,7 +86,8 @@ function App() {
           <Typography align='center' variant='h3' color='textPrimary'>
             Note App Test Front-End
           </Typography>
-          {notes.map(it => NoteCard(it))}
+          {notes.map(it => makeNoteCard(it))}
+          <Button variant="outlined" onClick={() => fetchNotes()}>Fetch All Notes</Button>
         </Stack>
       </Container>
     </ThemeProvider>
