@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { z } from "zod";
 import Container from '@mui/material/Container';
 import Card from '@mui/material/Card';
@@ -9,12 +9,8 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogContent from '@mui/material/DialogContent';
-import TextareaAutosize from '@mui/material/TextareaAutosize';
-import TextField from '@mui/material/TextField';
+import { CreateNoteDialog } from './CreateNoteDialog';
+import { DeleteNoteDialog } from './DeleteNoteDialog';
 
 const noteSchema = z.object({
   id: z.number().positive().int(),
@@ -135,42 +131,14 @@ function App() {
           <Button variant="outlined" onClick={() => fetchNotes()}>Fetch All Notes</Button>
           <Button variant="outlined" onClick={() => setShowCreateModal(true)}>Create Note</Button>
           <Button variant="outlined" onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
-          <Dialog open={showCreateModal} onClose={() => setShowCreateModal(false)}>
-            <DialogContent>
-              <DialogContentText sx={{pb: 1}}>
-                Input note body and create note.
-              </DialogContentText>
-              <TextareaAutosize
-                placeholder="Input Body"
-                id="note-input-body"
-                style={{width: '100%'}}
-                value={noteBodyInputValue}
-                onChange={(event) => setNoteBodyInputValue(event.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setShowCreateModal(false)}>Cancel</Button>
-              <Button onClick={() => handleClickCreateNote()}>Create</Button>
-            </DialogActions>
-          </Dialog>
-          <Dialog open={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
-            <DialogContent>
-              <DialogContentText sx={{pb: 1}}>
-                Enter the ID of the note to delete.
-              </DialogContentText>
-              <TextField
-                id="delete-note-id-field"
-                label="ID"
-                variant="outlined"
-                value={noteDeleteId}
-                onChange={(event) => setNoteDeleteId(parseInt(event.target.value))}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setShowDeleteModal(false)}>Cancel</Button>
-              <Button onClick={() => handleClickDeleteNote()}>Delete</Button>
-            </DialogActions>
-          </Dialog>
+          <CreateNoteDialog
+            showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal}
+            noteBodyInputValue={noteBodyInputValue} setNoteBodyInputValue={setNoteBodyInputValue}
+            handleClickCreateNote={handleClickCreateNote} />
+          <DeleteNoteDialog
+            showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal}
+            noteDeleteId={noteDeleteId} setNoteDeleteId={setNoteDeleteId}
+            handleClickDeleteNote={handleClickDeleteNote} />
         </Stack>
       </Container>
     </ThemeProvider>
