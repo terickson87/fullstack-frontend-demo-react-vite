@@ -33,7 +33,7 @@ const theme = createTheme({
   },
 });
 
-function App() {
+function App(): React.JSX.Element {
   const [notes, setNotes] = useState<Note[]>(hardCodedNotes);
   const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
   const [noteBodyInputValue, setNoteBodyInputValue] = useState<string>('');
