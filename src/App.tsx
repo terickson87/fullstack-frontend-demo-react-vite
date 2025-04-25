@@ -7,8 +7,10 @@ import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import { CreateNoteDialog } from './CreateNoteDialog';
 import { DeleteNoteDialog } from './DeleteNoteDialog';
-import { Note, NotesResponse, notesResponseSchema } from './types';
+import { Note } from './types';
 import { NoteCard } from './NoteCard';
+import { fetchAllNotes, createNote, deleteNote, updateNote } from './apiCalls';
+import { UpdateNoteDialog } from './UpdateNoteDialog';
 
 const hardCodedNotes: Note[] = [
   {
@@ -37,62 +39,55 @@ function App() {
   const [noteBodyInputValue, setNoteBodyInputValue] = useState<string>('');
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [noteDeleteId, setNoteDeleteId] = useState<number | undefined>(undefined);
+  const [showUpdateModal, setShowUpdateModal] = useState<boolean>(false);
+  const [noteUpdateId, setNoteUpdateId] = useState<number | undefined>(undefined);
 
-  async function fetchNotes(): Promise<void> {
-    const response = await fetch('http://localhost:8080/notes/all');
-    const json = await response.json();
-    const validated: NotesResponse = notesResponseSchema.parse(json);
-    const notes: Note[] = validated.notes;
-    setNotes([...hardCodedNotes, ...notes])
-  }
-
-  async function createNote(): Promise<void> {
-    const requestBody = {
-      body: noteBodyInputValue
-    };
-    const response = await fetch('http://localhost:8080/notes/new', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(requestBody),
-    });
-    if (response.status === 200) {
-      await fetchNotes();
-    }
+  async function handleFetchAllNotes(): Promise<void> {
+    const notes = await fetchAllNotes();
+    setNotes([...hardCodedNotes, ...notes]);
   }
 
   async function handleClickCreateNote(): Promise<void> {
-    await createNote();
-    setNoteBodyInputValue('');
-    setShowCreateModal(false)
-  }
-
-  async function deleteNote(): Promise<void> {
-    const response = await fetch(`http://localhost:8080/notes/delete/${noteDeleteId}`);
+    const response = await createNote(noteBodyInputValue);
     if (response.status === 200) {
-      await fetchNotes();
+      await handleFetchAllNotes();
     }
+    setNoteBodyInputValue('');
+    setShowCreateModal(false);
   }
 
   async function handleClickDeleteNote(): Promise<void> {
-    await deleteNote();
+    const response = await deleteNote(noteDeleteId);
+    if (response.status === 200) {
+      await handleFetchAllNotes();
+    }
     setNoteDeleteId(undefined);
-    setShowDeleteModal(false)
+    setShowDeleteModal(false);
+  }
+
+  async function handleClickUpdateNote(): Promise<void>  {
+    const response = await updateNote(noteUpdateId, noteBodyInputValue);
+    if (response.status === 200) {
+      await handleFetchAllNotes();
+    }
+    setNoteBodyInputValue('');
+    setNoteUpdateId(undefined);
+    setShowUpdateModal(false);
   }
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Container maxWidth="lg" sx={{alignItems: "center"}}>
-        <Stack spacing={2} sx={{ justifyContent: 'center', alignItems: 'center' }}>
+        <Stack spacing={1} sx={{ justifyContent: 'center', alignItems: 'center' }}>
           <Typography align='center' variant='h3' color='textPrimary'>
             Note App Test Front-End
           </Typography>
           {notes.map(it => <NoteCard note={it}/>)}
-          <Button variant="outlined" onClick={() => fetchNotes()}>Fetch All Notes</Button>
+          <Button variant="outlined" onClick={() => handleFetchAllNotes()}>Fetch All Notes</Button>
           <Button variant="outlined" onClick={() => setShowCreateModal(true)}>Create Note</Button>
           <Button variant="outlined" onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
+          <Button variant="outlined" onClick={() => setShowUpdateModal(true)}>Update Note</Button>
           <CreateNoteDialog
             showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal}
             noteBodyInputValue={noteBodyInputValue} setNoteBodyInputValue={setNoteBodyInputValue}
@@ -101,6 +96,12 @@ function App() {
             showDeleteModal={showDeleteModal} setShowDeleteModal={setShowDeleteModal}
             noteDeleteId={noteDeleteId} setNoteDeleteId={setNoteDeleteId}
             handleClickDeleteNote={handleClickDeleteNote} />
+          <UpdateNoteDialog
+            showUpdateModal={showUpdateModal} setShowUpdateModal={setShowUpdateModal}
+            noteUpdateId={noteUpdateId} setNoteUpdateId={setNoteUpdateId}
+            noteBodyInputValue={noteBodyInputValue} setNoteBodyInputValue={setNoteBodyInputValue}
+            notes={notes}
+            handleClickUpdateNote={handleClickUpdateNote} />
         </Stack>
       </Container>
     </ThemeProvider>

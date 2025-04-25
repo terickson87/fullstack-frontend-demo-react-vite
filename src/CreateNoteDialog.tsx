@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -19,9 +19,13 @@ export function CreateNoteDialog({
   noteBodyInputValue, setNoteBodyInputValue,
   handleClickCreateNote
 }: CreateNoteDialogProps): React.JSX.Element {
+  const handleCloseModal = useCallback(() => {
+    setNoteBodyInputValue('');
+    setShowCreateModal(false);
+    }, [setNoteBodyInputValue, setShowCreateModal])
 
   return (
-    <Dialog open={showCreateModal} onClose={() => setShowCreateModal(false)}>
+    <Dialog open={showCreateModal} onClose={() => handleCloseModal()}>
       <DialogContent>
         <DialogContentText sx={{pb: 1}}>
           Input note body and create note.
@@ -35,7 +39,7 @@ export function CreateNoteDialog({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => setShowCreateModal(false)}>Cancel</Button>
+        <Button onClick={() => handleCloseModal()}>Cancel</Button>
         <Button onClick={() => handleClickCreateNote()}>Create</Button>
       </DialogActions>
     </Dialog>

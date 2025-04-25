@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -9,8 +9,8 @@ import TextField from '@mui/material/TextField';
 type CreateNoteDialogProps = {
   showDeleteModal: boolean;
   setShowDeleteModal: (x: boolean) => void;
-  noteDeleteId: number| undefined;
-  setNoteDeleteId: (x: number) => void;
+  noteDeleteId: number | undefined;
+  setNoteDeleteId: (x: number | undefined) => void;
   handleClickDeleteNote: () => void;
 }
 
@@ -19,9 +19,13 @@ export function DeleteNoteDialog({
   noteDeleteId, setNoteDeleteId,
   handleClickDeleteNote
 }: CreateNoteDialogProps): React.JSX.Element {
+  const handleCloseModal = useCallback(() => {
+    setNoteDeleteId(undefined);
+    setShowDeleteModal(false);
+  }, [setNoteDeleteId, setShowDeleteModal])
 
   return(
-    <Dialog open={showDeleteModal} onClose={() => setShowDeleteModal(false)}>
+    <Dialog open={showDeleteModal} onClose={() => handleCloseModal()}>
         <DialogContent>
           <DialogContentText sx={{pb: 1}}>
             Enter the ID of the note to delete.
@@ -35,7 +39,7 @@ export function DeleteNoteDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowDeleteModal(false)}>Cancel</Button>
+          <Button onClick={() => handleCloseModal()}>Cancel</Button>
           <Button onClick={() => handleClickDeleteNote()}>Delete</Button>
         </DialogActions>
       </Dialog>
