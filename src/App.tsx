@@ -9,6 +9,11 @@ import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogContent from '@mui/material/DialogContent';
+import TextareaAutosize from '@mui/material/TextareaAutosize';
 
 const noteSchema = z.object({
   id: z.number().positive().int(),
@@ -69,6 +74,8 @@ const theme = createTheme({
 
 function App() {
   const [notes, setNotes] = useState<Note[]>(hardCodedNotes);
+  const [showCreateModal, setShowCreateModal] = useState<boolean>(false);
+  const [noteBodyInputValue, setNoteBodyInputValue] = useState<string>('');
 
   async function fetchNotes(): Promise<void> {
     const response = await fetch('http://localhost:8080/notes/all');
@@ -88,6 +95,25 @@ function App() {
           </Typography>
           {notes.map(it => makeNoteCard(it))}
           <Button variant="outlined" onClick={() => fetchNotes()}>Fetch All Notes</Button>
+          <Button variant="outlined" onClick={() => setShowCreateModal(true)}>Create Note</Button>
+          <Dialog open={showCreateModal} onClose={() => setShowCreateModal(false)}>
+            <DialogContent>
+              <DialogContentText sx={{pb: 1}}>
+                Input note body and create note.
+              </DialogContentText>
+              <TextareaAutosize
+                placeholder="Input Body"
+                id="note-input-body"
+                style={{width: '100%'}}
+                value={noteBodyInputValue}
+                onChange={(event) => setNoteBodyInputValue(event.target.value)}
+              />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={() => setShowCreateModal(false)}>Cancel</Button>
+              <Button type="submit">Create</Button>
+            </DialogActions>
+          </Dialog>
         </Stack>
       </Container>
     </ThemeProvider>
