@@ -85,6 +85,28 @@ function App() {
     setNotes([...hardCodedNotes, ...notes])
   }
 
+  async function createNote(): Promise<void> {
+    const requestBody = {
+      body: noteBodyInputValue
+    };
+    const response = await fetch('http://localhost:8080/notes/new', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody),
+    });
+    if (response.status === 200) {
+      await fetchNotes();
+    }
+  }
+
+  async function handleClickCreateNote(): Promise<void> {
+    await createNote();
+    setNoteBodyInputValue('');
+    setShowCreateModal(false)
+  }
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
@@ -111,7 +133,7 @@ function App() {
             </DialogContent>
             <DialogActions>
               <Button onClick={() => setShowCreateModal(false)}>Cancel</Button>
-              <Button type="submit">Create</Button>
+              <Button onClick={() => handleClickCreateNote()}>Create</Button>
             </DialogActions>
           </Dialog>
         </Stack>
