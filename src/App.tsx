@@ -17,13 +17,13 @@ const hardCodedNotes: Note[] = [
     "id": -1,
     "createdAt": new Date("2025-04-17T22:27:01.757638Z"),
     "modifiedAt": new Date("2025-04-17T22:27:01.757638Z"),
-    "body": "Note 1 body"
+    "body": "Hardcoded Note 1 body"
   },
   {
     "id": -2,
     "createdAt": new Date("2025-04-17T23:27:01.757638Z"),
     "modifiedAt": new Date("2025-04-17T23:27:01.757638Z"),
-    "body": "Note 2 body"
+    "body": "Hardcoded Note 2 body"
   }
 ]
 
@@ -49,7 +49,7 @@ function App(): React.JSX.Element {
 
   async function handleClickCreateNote(): Promise<void> {
     const response = await createNote(noteBodyInputValue);
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       await handleFetchAllNotes();
     }
     setNoteBodyInputValue('');
@@ -78,16 +78,16 @@ function App(): React.JSX.Element {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Container maxWidth="lg" sx={{alignItems: "center"}}>
+      <Container maxWidth="lg" sx={{alignItems: "center"}} data-testid="container">
         <Stack sx={{ justifyContent: 'center', alignItems: 'center' }}>
           <Typography align='center' variant='h3' color='textPrimary' sx={{mb:1}}>
             Note App Test Front-End
           </Typography>
           {notes.map(it => <NoteCard note={it}/>)}
-          <Button variant="outlined" sx={{mb:1}} onClick={() => handleFetchAllNotes()}>Fetch All Notes</Button>
-          <Button variant="outlined" sx={{mb:1}} onClick={() => setShowCreateModal(true)}>Create Note</Button>
-          <Button variant="outlined" sx={{mb:1}} onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
-          <Button variant="outlined" onClick={() => setShowUpdateModal(true)}>Update Note</Button>
+          <Button variant="outlined" data-testid="fetch-all-button" sx={{mb:1}} onClick={() => handleFetchAllNotes()}>Fetch All Notes</Button>
+          <Button variant="outlined" data-testid="create-button" sx={{mb:1}} onClick={() => setShowCreateModal(true)}>Create Note</Button>
+          <Button variant="outlined" data-testid="delete-button" sx={{mb:1}} onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
+          <Button variant="outlined" data-testid="update-button" onClick={() => setShowUpdateModal(true)}>Update Note</Button>
           <CreateNoteDialog
             showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal}
             noteBodyInputValue={noteBodyInputValue} setNoteBodyInputValue={setNoteBodyInputValue}

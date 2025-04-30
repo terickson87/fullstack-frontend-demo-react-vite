@@ -50,7 +50,7 @@ export function UpdateNoteDialog({
     }, [setNoteBodyInputValue, setNoteUpdateId, setShowUpdateModal])
 
   return (
-    <Dialog open={showUpdateModal} onClose={() => handleCloseModal()}>
+    <Dialog data-testid="update-note-dialog" open={showUpdateModal} onClose={() => handleCloseModal()}>
       <DialogContent>
         <DialogContentText sx={{mb: 1}}>
           Enter the ID of the note to update.

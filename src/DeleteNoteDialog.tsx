@@ -25,7 +25,7 @@ export function DeleteNoteDialog({
   }, [setNoteDeleteId, setShowDeleteModal])
 
   return(
-    <Dialog open={showDeleteModal} onClose={() => handleCloseModal()}>
+    <Dialog data-testid="delete-note-dialog" open={showDeleteModal} onClose={() => handleCloseModal()}>
         <DialogContent>
           <DialogContentText sx={{mb: 1}}>
             Enter the ID of the note to delete.

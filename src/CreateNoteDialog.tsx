@@ -25,22 +25,31 @@ export function CreateNoteDialog({
     }, [setNoteBodyInputValue, setShowCreateModal])
 
   return (
-    <Dialog open={showCreateModal} onClose={() => handleCloseModal()}>
+    <Dialog data-testid="create-note-dialog" open={showCreateModal} onClose={() => handleCloseModal()}>
       <DialogContent>
         <DialogContentText sx={{mb: 1}}>
           Input note body and create note.
         </DialogContentText>
         <TextareaAutosize
           placeholder="Input Body"
-          id="note-input-body"
+          id="create-note-input-body"
+          data-testid="create-note-input-body"
           style={{width: '100%'}}
           value={noteBodyInputValue}
           onChange={(event) => setNoteBodyInputValue(event.target.value)}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleCloseModal()}>Cancel</Button>
-        <Button onClick={() => handleClickCreateNote()}>Create</Button>
+        <Button
+          id="create-note-cancel-button"
+          data-testid="create-note-cancel-button"
+          onClick={() => handleCloseModal()}>
+            Cancel
+          </Button>
+          <Button
+          id="create-note-create-button"
+          data-testid="create-note-create-button"
+          onClick={() => handleClickCreateNote()}>Create</Button>
       </DialogActions>
     </Dialog>
   );
