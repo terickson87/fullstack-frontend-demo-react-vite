@@ -58,7 +58,7 @@ function App(): React.JSX.Element {
 
   async function handleClickDeleteNote(): Promise<void> {
     const response = await deleteNote(noteDeleteId);
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       await handleFetchAllNotes();
     }
     setNoteDeleteId(undefined);
@@ -67,7 +67,7 @@ function App(): React.JSX.Element {
 
   async function handleClickUpdateNote(): Promise<void>  {
     const response = await updateNote(noteUpdateId, noteBodyInputValue);
-    if (response.status === 200) {
+    if (response.status >= 200 && response.status < 300) {
       await handleFetchAllNotes();
     }
     setNoteBodyInputValue('');

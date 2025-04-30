@@ -43,13 +43,11 @@ export function CreateNoteDialog({
         <Button
           id="create-note-cancel-button"
           data-testid="create-note-cancel-button"
-          onClick={() => handleCloseModal()}>
-            Cancel
-          </Button>
+          onClick={() => handleCloseModal()}>Cancel</Button>
           <Button
-          id="create-note-create-button"
-          data-testid="create-note-create-button"
-          onClick={() => handleClickCreateNote()}>Create</Button>
+            id="create-note-create-button"
+            data-testid="create-note-create-button"
+            onClick={() => handleClickCreateNote()}>Create</Button>
       </DialogActions>
     </Dialog>
   );

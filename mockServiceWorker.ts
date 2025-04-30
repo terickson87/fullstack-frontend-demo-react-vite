@@ -48,6 +48,24 @@ export function createHandlers(serverNotes: DbNote[]) {
     
       return HttpResponse.json(noteToAdd, { status: 201 });
     }),
+    http.get('http://localhost:8080/notes/delete/:id', (info) => {
+      const url = new URL(info.request.url);
+      const id = url.pathname.split('/').pop();
+
+      if (!id) {
+        return HttpResponse.json({ error: 'Invalid note ID' }, { status: 400 });
+      }
+
+      const noteIndex = serverNotes.findIndex((note) => note.id === parseInt(id, 10));
+
+      if (noteIndex === -1) {
+        return HttpResponse.json({ error: 'Note not found' }, { status: 404 });
+      }
+
+      serverNotes.splice(noteIndex, 1); // Remove the note from the array
+
+      return HttpResponse.json({ message: 'Note deleted successfully' }, { status: 200 });
+    }),
   ];
 }
 

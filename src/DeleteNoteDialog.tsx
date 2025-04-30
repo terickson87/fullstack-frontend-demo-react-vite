@@ -23,6 +23,10 @@ export function DeleteNoteDialog({
     setNoteDeleteId(undefined);
     setShowDeleteModal(false);
   }, [setNoteDeleteId, setShowDeleteModal])
+  // const handleIdChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  //   const newId = parseInt(event.target.value);
+  //   setNoteDeleteId(newId);
+  // }, [setNoteDeleteId]);
 
   return(
     <Dialog data-testid="delete-note-dialog" open={showDeleteModal} onClose={() => handleCloseModal()}>
@@ -32,6 +36,7 @@ export function DeleteNoteDialog({
           </DialogContentText>
           <TextField
             id="delete-note-id-field"
+            data-testid="delete-note-id-field"
             label="ID"
             variant="outlined"
             value={noteDeleteId}
@@ -39,8 +44,14 @@ export function DeleteNoteDialog({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => handleCloseModal()}>Cancel</Button>
-          <Button onClick={() => handleClickDeleteNote()}>Delete</Button>
+          <Button
+            id="delete-note-cancel-button"
+            data-testid="create-note-cancel-button"
+            onClick={() => handleCloseModal()}>Cancel</Button>
+          <Button
+            id="delete-note-delete-button"
+            data-testid="delete-note-delete-button"
+            onClick={() => handleClickDeleteNote()}>Delete</Button>
         </DialogActions>
       </Dialog>
   )
