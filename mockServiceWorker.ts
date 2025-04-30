@@ -66,6 +66,31 @@ export function createHandlers(serverNotes: DbNote[]) {
 
       return HttpResponse.json({ message: 'Note deleted successfully' }, { status: 200 });
     }),
+    http.post('http://localhost:8080/notes/update/:id', async (info) => {
+      const url = new URL(info.request.url);
+      const idStr = url.pathname.split('/').pop() as string;
+
+      if (!idStr) {
+        return HttpResponse.json({ error: 'Invalid note ID' }, { status: 400 });
+      }
+
+      const id = parseInt(idStr);
+      const request = info.request;
+      const newBody = (await request.json()) as Pick<DbNote, 'body'>;
+      const matchingNote = serverNotes.filter( it => it.id === id)[0];
+      const matchingIndex = serverNotes.indexOf(matchingNote);
+    
+      const noteToAdd = {
+        id,
+        createdAt: new Date().toISOString(),
+        modifiedAt: new Date().toISOString(),
+        body: newBody.body
+      };
+    
+      serverNotes.splice(matchingIndex, 1, noteToAdd);
+    
+      return HttpResponse.json(noteToAdd, { status: 200 });
+    }),
   ];
 }
 

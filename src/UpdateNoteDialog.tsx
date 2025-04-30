@@ -57,6 +57,7 @@ export function UpdateNoteDialog({
         </DialogContentText>
         <TextField
           id="update-note-id-field"
+          data-testid="update-note-id-field"
           label="ID"
           variant="outlined"
           value={noteUpdateId}
@@ -65,19 +66,26 @@ export function UpdateNoteDialog({
         />
         {noteUpdateId !== undefined && (noteBodyInputValue.length > 0 ?
           <TextareaAutosize
-          placeholder="Input Body"
-          id="note-input-body"
-          style={{width: '100%'}}
-          value={noteBodyInputValue}
-          onChange={(event) => setNoteBodyInputValue(event.target.value)}
-            />
+            placeholder="Input Body"
+            id="update-note-input-body"
+            data-testid="update-note-input-body"
+            style={{width: '100%'}}
+            value={noteBodyInputValue}
+            onChange={(event) => setNoteBodyInputValue(event.target.value)}
+          />
           :
           <Typography variant='body1' color='textSecondary'>Note with ID: {noteUpdateId} note found.</Typography>)
         }
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleCloseModal()}>Cancel</Button>
-        <Button onClick={() => handleClickUpdateNote()}>Update</Button>
+      <Button 
+          id="update-note-cancel-button"
+          data-testid="update-note-cancel-button"
+          onClick={() => handleCloseModal()}>Cancel</Button>
+        <Button 
+          id="update-note-update-button"
+          data-testid="update-note-update-button"
+          onClick={() => handleClickUpdateNote()}>Update</Button>
       </DialogActions>
     </Dialog>
   )

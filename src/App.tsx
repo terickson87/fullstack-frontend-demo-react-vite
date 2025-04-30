@@ -66,6 +66,7 @@ function App(): React.JSX.Element {
   }
 
   async function handleClickUpdateNote(): Promise<void>  {
+    await handleFetchAllNotes();
     const response = await updateNote(noteUpdateId, noteBodyInputValue);
     if (response.status >= 200 && response.status < 300) {
       await handleFetchAllNotes();

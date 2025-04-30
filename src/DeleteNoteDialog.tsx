@@ -23,10 +23,6 @@ export function DeleteNoteDialog({
     setNoteDeleteId(undefined);
     setShowDeleteModal(false);
   }, [setNoteDeleteId, setShowDeleteModal])
-  // const handleIdChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-  //   const newId = parseInt(event.target.value);
-  //   setNoteDeleteId(newId);
-  // }, [setNoteDeleteId]);
 
   return(
     <Dialog data-testid="delete-note-dialog" open={showDeleteModal} onClose={() => handleCloseModal()}>
