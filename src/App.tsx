@@ -84,10 +84,25 @@ function App(): React.JSX.Element {
             Note App Test Front-End
           </Typography>
           {notes.map(it => <NoteCard note={it}/>)}
-          <Button variant="outlined" data-testid="fetch-all-button" sx={{mb:1}} onClick={() => handleFetchAllNotes()}>Fetch All Notes</Button>
-          <Button variant="outlined" data-testid="create-button" sx={{mb:1}} onClick={() => setShowCreateModal(true)}>Create Note</Button>
-          <Button variant="outlined" data-testid="delete-button" sx={{mb:1}} onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
-          <Button variant="outlined" data-testid="update-button" onClick={() => setShowUpdateModal(true)}>Update Note</Button>
+          <Button
+            variant="outlined"
+            data-testid="fetch-all-button"
+            sx={{mb:1}}
+            onClick={() => handleFetchAllNotes()}>Fetch All Notes</Button>
+          <Button
+            variant="outlined"
+            data-testid="create-button"
+            sx={{mb:1}}
+            onClick={() => setShowCreateModal(true)}>Create Note</Button>
+          <Button
+            variant="outlined"
+            data-testid="delete-button"
+            sx={{mb:1}}
+            onClick={() => setShowDeleteModal(true)}>Delete Note</Button>
+          <Button
+            variant="outlined"
+            data-testid="update-button"
+            onClick={() => setShowUpdateModal(true)}>Update Note</Button>
           <CreateNoteDialog
             showCreateModal={showCreateModal} setShowCreateModal={setShowCreateModal}
             noteBodyInputValue={noteBodyInputValue} setNoteBodyInputValue={setNoteBodyInputValue}

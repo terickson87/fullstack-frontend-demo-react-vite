@@ -1,7 +1,9 @@
 import {render, screen, waitForElementToBeRemoved} from '@testing-library/react';
 import App from './App';
-import { server } from '../mockServiceWorker';
-import userEvent, { UserEvent } from '@testing-library/user-event'
+import { createHandlers, DbNote, initialServerNotes, server } from '../mockServiceWorker';
+import userEvent, { UserEvent } from '@testing-library/user-event';
+
+let serverNotes: DbNote[];
 
 describe('App', () => {
   let user: UserEvent;
@@ -19,6 +21,8 @@ describe('App', () => {
   
   beforeEach(() => {
     user = userEvent.setup();
+    serverNotes = [...initialServerNotes];
+    server.use(...createHandlers(serverNotes));
   })
 
   test('renders', () => {
